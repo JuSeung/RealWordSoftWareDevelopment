@@ -1,4 +1,4 @@
-package main.chapter02.cohesion;
+package main.chapter02.coupling;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,20 +7,18 @@ import java.nio.file.Paths;
 import java.time.Month;
 import java.util.List;
 import main.BankStatementProcessor;
-import main.chapter02.BankStatementCSVParser;
 import main.chapter02.BankTransaction;
+import main.chapter02.parser.BankStatementParser;
 
-public class BankTransctionAnalyzer {
+public class BankStatementAnalyzer {
+
     private static final String RESOURCE = "src/main/resources/";
 
-    public static void main(String[] args) throws IOException {
-        final BankStatementCSVParser bankStatementCSVParser = new BankStatementCSVParser();
-        final String fileName = args[0];
+    public void analyzer(final String fileName, final BankStatementParser bankStatementParser) throws IOException {
         final Path path = Paths.get(RESOURCE + fileName);
         final List<String> lines = Files.readAllLines(path);
 
-        final List<BankTransaction> bankTransactions = bankStatementCSVParser.parseLinesFromCSV(lines);
-
+        final List<BankTransaction> bankTransactions = bankStatementParser.parseLinesFrom(lines);
         final BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(bankTransactions);
         collectSummary(bankStatementProcessor);
     }
